@@ -1,0 +1,39 @@
+- name: Allow SSH (rate limited)
+  community.general.ufw:
+    rule: limit
+    port: "22"
+    proto: tcp
+
+- name: Allow WireGuard
+  community.general.ufw:
+    rule: allow
+    port: "{{ wg_port }}"
+    proto: udp
+
+- name: Allow DNS from VPN clients only
+  community.general.ufw:
+    rule: allow
+    interface: wg0
+    direction: in
+    port: "53"
+
+- name: Allow AdGuard web UI from VPN clients only
+  community.general.ufw:
+    rule: allow
+    interface: wg0
+    direction: in
+    port: "3000"
+    proto: tcp
+
+- name: Allow VPN clients to reach the internet through the server
+  community.general.ufw:
+    rule: allow
+    route: true
+    interface_in: wg0
+    interface_out: "{{ ansible_facts['default_ipv4']['interface'] }}"
+
+- name: Deny all other incoming traffic and enable ufw
+  community.general.ufw:
+    state: enabled
+    default: deny
+    direction: incoming

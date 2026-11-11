@@ -1,0 +1,8 @@
+- name: Build and harden the VPN server
+  hosts: vpn
+  roles:
+    - base
+    - users
+    - ssh
+    - firewall
+    - fail2ban

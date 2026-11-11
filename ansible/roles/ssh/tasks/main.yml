@@ -1,0 +1,10 @@
+- name: Install SSH hardening config
+  ansible.builtin.template:
+    src: 10-hardening.conf.j2
+    dest: /etc/ssh/sshd_config.d/10-hardening.conf
+    mode: "0644"
+  notify: Restart ssh
+
+- name: Check sshd config is valid before restarting
+  ansible.builtin.command: sshd -t
+  changed_when: false

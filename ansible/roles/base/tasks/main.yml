@@ -1,0 +1,17 @@
+- name: Upgrade all packages
+  ansible.builtin.apt:
+    update_cache: true
+    upgrade: dist
+
+- name: Install required packages
+  ansible.builtin.apt:
+    name: [unattended-upgrades, ufw, fail2ban, wireguard, qrencode, lynis, jq]
+    state: present
+
+- name: Turn on automatic security updates
+  ansible.builtin.copy:
+    dest: /etc/apt/apt.conf.d/20auto-upgrades
+    content: |
+      APT::Periodic::Update-Package-Lists "1";
+      APT::Periodic::Unattended-Upgrade "1";
+    mode: "0644"

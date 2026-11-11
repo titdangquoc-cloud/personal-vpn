@@ -1,0 +1,6 @@
+admin_user: vpnadmin
+ansible_become: true
+
+wg_port: 51820
+wg_network: 10.8.0.0/24
+wg_server_ip: 10.8.0.1
