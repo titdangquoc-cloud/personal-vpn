@@ -1,0 +1,12 @@
+# Terraform state can contain secrets
+*.tfstate
+*.tfstate.*
+.terraform/
+*.tfvars
+
+# WireGuard keys and client configs
+clients/
+*.key
+
+# Ansible Vault password
+.vault_pass
