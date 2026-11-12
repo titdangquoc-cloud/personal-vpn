@@ -4,8 +4,8 @@ ListenPort = {{ wg_port }}
 # The private key is loaded from a separate file, so it never appears in this config
 PostUp = wg set %i private-key /etc/wireguard/server.key
 # NAT: rewrite VPN traffic so it leaves with the server's public IP
-PostUp = iptables -t nat -A POSTROUTING -s {{ wg_network }} -o {{ ansible_default_ipv4.interface }} -j MASQUERADE
-PostDown = iptables -t nat -D POSTROUTING -s {{ wg_network }} -o {{ ansible_default_ipv4.interface }} -j MASQUERADE
+PostUp = iptables -t nat -A POSTROUTING -s {{ wg_network }} -o {{ ansible_facts['default_ipv4']['interface'] }} -j MASQUERADE
+PostDown = iptables -t nat -D POSTROUTING -s {{ wg_network }} -o {{ ansible_facts['default_ipv4']['interface'] }} -j MASQUERADE
 
 {% for peer in wg_peers %}
 [Peer]
