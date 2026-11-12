@@ -6,3 +6,4 @@
     - ssh
     - firewall
     - fail2ban
+    - wireguard

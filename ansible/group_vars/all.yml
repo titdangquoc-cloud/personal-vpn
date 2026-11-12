@@ -4,3 +4,11 @@ ansible_become: true
 wg_port: 51820
 wg_network: 10.8.0.0/24
 wg_server_ip: 10.8.0.1
+
+wg_peers:
+  - name: laptop
+    public_key: +eE2KjMpaH4eazDTQCLjFy7c48NpL5XWObvwjP09tns=
+    ip: 10.8.0.2
+  - name: phone
+    public_key: qZhXHwsz0bg9ePtijv2KwU02I1MJrFJ4I+jjhtDuQAE=
+    ip: 10.8.0.3

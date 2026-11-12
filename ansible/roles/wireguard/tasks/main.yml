@@ -1,0 +1,33 @@
+- name: Enable IP forwarding so the server can route VPN traffic
+  ansible.posix.sysctl:
+    name: net.ipv4.ip_forward
+    value: "1"
+    sysctl_set: true
+    state: present
+
+- name: Generate the server private key (only if it doesn't exist)
+  ansible.builtin.shell: umask 077 && wg genkey > /etc/wireguard/server.key
+  args:
+    creates: /etc/wireguard/server.key
+
+- name: Read the server public key
+  ansible.builtin.shell: wg pubkey < /etc/wireguard/server.key
+  register: server_pubkey
+  changed_when: false
+
+- name: Show the server public key
+  ansible.builtin.debug:
+    msg: "Server public key: {{ server_pubkey.stdout }}"
+
+- name: Write the WireGuard config
+  ansible.builtin.template:
+    src: wg0.conf.j2
+    dest: /etc/wireguard/wg0.conf
+    mode: "0600"
+  notify: Restart WireGuard
+
+- name: Start WireGuard now and on every boot
+  ansible.builtin.service:
+    name: wg-quick@wg0
+    state: started
+    enabled: true
