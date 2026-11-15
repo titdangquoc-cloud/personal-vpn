@@ -7,3 +7,5 @@
     - firewall
     - fail2ban
     - wireguard
+    - adguard
+    - monitoring

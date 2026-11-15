@@ -1,0 +1,13 @@
+- name: Install the daily report script
+  ansible.builtin.template:
+    src: daily-report.sh.j2
+    dest: /usr/local/sbin/vpn-daily-report
+    mode: "0700"
+    owner: root
+
+- name: Run the report every morning at 8:00 (server time is UTC)
+  ansible.builtin.cron:
+    name: vpn daily report
+    minute: "0"
+    hour: "21"
+    job: /usr/local/sbin/vpn-daily-report

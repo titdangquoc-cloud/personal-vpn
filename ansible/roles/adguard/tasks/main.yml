@@ -1,0 +1,26 @@
+- name: Download the AdGuard Home installer
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/AdguardTeam/AdGuardHome/master/scripts/install.sh
+    dest: /root/adguard-install.sh
+    mode: "0700"
+
+- name: Install AdGuard Home (skipped if already installed)
+  ansible.builtin.command: /root/adguard-install.sh -v
+  args:
+    creates: /opt/AdGuardHome/AdGuardHome
+
+- name: Create systemd override folder
+  ansible.builtin.file:
+    path: /etc/systemd/system/AdGuardHome.service.d
+    state: directory
+    mode: "0755"
+
+- name: Make AdGuard start after WireGuard (it listens on the wg0 address)
+  ansible.builtin.copy:
+    dest: /etc/systemd/system/AdGuardHome.service.d/override.conf
+    content: |
+      [Unit]
+      After=wg-quick@wg0.service
+      Wants=wg-quick@wg0.service
+    mode: "0644"
+  notify: Restart AdGuard
